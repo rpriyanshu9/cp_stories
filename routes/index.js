@@ -13,13 +13,15 @@ router.get('/', ensureGuest, (req, res) => {
 // dashboard GET
 router.get('/dashboard', ensureAuth, async (req, res) => {
     try {
+        // to pass in the data in the template (handlebars) we need to add the method lean
         const stories = await Story.find({ user: req.user.id }).lean()
+        res.render('dashboard', {
+            name: req.user.firstName,
+            stories
+        })
     } catch (error) {
-
+        res.render('error/500')
     }
-    res.render('dashboard', {
-        name: req.user.firstName,
-    })
 })
 
 
